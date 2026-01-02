@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  docker-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: docker-mcp-server
+    # Mount Docker socket to allow container to manage host Docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # For Windows, use:
+    # volumes:
+    #   - //var/run/docker.sock:/var/run/docker.sock
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    # Optionally set environment variables
+    environment:
+      - PYTHONUNBUFFERED=1

@@ -48,3 +48,6 @@ uv.lock
 
 # MCP
 .mcp/
+
+# Docker
+docker-compose.override.yml

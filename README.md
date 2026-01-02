@@ -35,7 +35,67 @@ pip install -e .
 
 ## Usage
 
-### With Claude Code
+### Option 1: Run with Docker (Recommended)
+
+#### Build and Run with Docker Compose
+
+```bash
+# Build and start the container
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the container
+docker-compose down
+```
+
+#### Build and Run with Docker CLI
+
+```bash
+# Build the image
+docker build -t docker-mcp-server .
+
+# Run the container (Linux/macOS)
+docker run -it --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  docker-mcp-server
+
+# Run the container (Windows)
+docker run -it --rm \
+  -v //var/run/docker.sock:/var/run/docker.sock \
+  docker-mcp-server
+```
+
+**Important:** The `-v` flag mounts the Docker socket, allowing the container to manage the host's Docker daemon.
+
+#### Configure with Claude Code (Docker)
+
+```bash
+# Add the Docker-based server
+claude mcp add --transport stdio docker -- docker run -i --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  docker-mcp-server
+```
+
+Or configure in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "docker": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-v", "/var/run/docker.sock:/var/run/docker.sock",
+        "docker-mcp-server"
+      ]
+    }
+  }
+}
+```
+
+### Option 2: Run with Python (Local Development)
 
 Add the server to your Claude Code configuration:
 
@@ -61,6 +121,12 @@ Or configure in `.mcp.json`:
 Test the server using MCP Inspector:
 
 ```bash
+# With Docker
+docker run -i --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  docker-mcp-server | mcp-inspector
+
+# With Python
 mcp-inspector -- python server.py
 ```
 
@@ -97,6 +163,9 @@ custom-docker-mcp-server/
 │   └── containers.py      # Container operations
 ├── server.py              # Main MCP server implementation
 ├── pyproject.toml         # Project configuration
+├── Dockerfile             # Docker image definition
+├── docker-compose.yml     # Docker Compose configuration
+├── .dockerignore          # Docker build exclusions
 ├── README.md              # This file
 └── .gitignore            # Git ignore rules
 ```
