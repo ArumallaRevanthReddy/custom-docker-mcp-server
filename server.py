@@ -6,13 +6,26 @@ Provides Docker management tools via the Model Context Protocol.
 """
 
 from mcp.server.fastmcp import FastMCP
-import docker
+from src.containers import list_running_containers
 
 # Initialize the MCP server
 mcp = FastMCP("docker")
 
 
-# Tools will be implemented here
+@mcp.tool()
+async def list_containers() -> str:
+    """
+    List all running Docker containers.
+
+    Returns:
+        Formatted list of running containers with their details including:
+        - Container ID
+        - Name
+        - Image
+        - Status
+        - Port mappings
+    """
+    return list_running_containers()
 
 
 def main():

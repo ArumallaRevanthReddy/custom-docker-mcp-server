@@ -66,7 +66,25 @@ mcp-inspector -- python server.py
 
 ## Available Tools
 
-(Tools will be documented here as they are implemented)
+### `list_containers`
+
+Lists all running Docker containers with detailed information.
+
+**Parameters:** None
+
+**Returns:**
+- Container ID (short form)
+- Container name
+- Image name/tag
+- Status
+- Port mappings
+
+**Example usage:**
+```
+User: "Show me all running containers"
+Claude: Uses list_containers tool
+Result: Displays formatted list of running containers
+```
 
 ## Development
 
@@ -74,15 +92,24 @@ mcp-inspector -- python server.py
 
 ```
 custom-docker-mcp-server/
-├── server.py           # Main MCP server implementation
-├── pyproject.toml      # Project configuration
-├── README.md           # This file
-└── .gitignore         # Git ignore rules
+├── src/                    # Business logic
+│   ├── __init__.py        # Package initialization
+│   └── containers.py      # Container operations
+├── server.py              # Main MCP server implementation
+├── pyproject.toml         # Project configuration
+├── README.md              # This file
+└── .gitignore            # Git ignore rules
 ```
 
 ### Adding New Tools
 
-Tools are implemented using the FastMCP framework. See `server.py` for examples.
+Tools are implemented using the FastMCP framework with business logic separated in the `src/` directory:
+
+1. **Add business logic** in appropriate module under `src/` (e.g., `src/containers.py`)
+2. **Define the MCP tool** in `server.py` using `@mcp.tool()` decorator
+3. **Import and call** the business logic from the tool
+
+See `server.py` and `src/containers.py` for examples.
 
 ## Requirements
 
